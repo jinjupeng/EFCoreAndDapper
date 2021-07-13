@@ -5,15 +5,16 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
+using WebAPI.Model.Contexts;
 
 namespace WebAPI.DAL.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly DbContext _dbContext;
+        private readonly ContextMySql _dbContext;
         private bool _disposed = false;
 
-        public UnitOfWork(DbContext context)
+        public UnitOfWork(ContextMySql context)
         {
             _dbContext = context ?? throw new ArgumentNullException(nameof(context));
         }

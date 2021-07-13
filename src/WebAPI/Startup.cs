@@ -1,14 +1,16 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using WebAPI.BLL;
+using WebAPI.DAL;
+using WebAPI.DAL.UnitOfWork;
+using WebAPI.Extensions.AOP;
+using WebAPI.IBLL;
+using WebAPI.IDAL;
+using WebAPI.Model.Contexts;
 
 namespace WebAPI
 {
@@ -24,6 +26,14 @@ namespace WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // 泛型注入
+            services.AddScoped(typeof(IBaseService<>), typeof(BaseService<>));
+            services.AddScoped(typeof(IBaseDal<>), typeof(BaseDal<>));
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped(typeof(TransactionInterceptor));
+
+            // 数据库上下文注入
+            services.AddDbContext<ContextMySql>(option => option.UseMySql(Configuration["Setting:DefaultConnection"]));
             services.AddControllers();
         }
 
