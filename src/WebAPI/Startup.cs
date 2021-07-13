@@ -29,7 +29,8 @@ namespace WebAPI
             // 泛型注入
             services.AddScoped(typeof(IBaseService<>), typeof(BaseService<>));
             services.AddScoped(typeof(IBaseDal<>), typeof(BaseDal<>));
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            //https://www.cnblogs.com/sheng-jie/p/7416302.html
+            services.AddScoped<IUnitOfWork, UnitOfWork<ContextMySql>>();
             services.AddScoped(typeof(TransactionInterceptor));
 
             // 数据库上下文注入
