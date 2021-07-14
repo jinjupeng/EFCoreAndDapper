@@ -24,6 +24,10 @@ namespace WebAPI.Extensions.AOP
             _logger = logger;
         }
 
+        /// <summary>
+        /// 注意：异步方法和同步方法需要分开处理
+        /// </summary>
+        /// <param name="invocation"></param>
         public void Intercept(IInvocation invocation)
         {
             var method = invocation.MethodInvocationTarget ?? invocation.Method;

@@ -7,7 +7,7 @@ namespace WebAPI.BLL
 {
     public interface ITestService
     {
-        Task InsertAsync();
+        void InsertAsync();
         List<sys_user> GetUsers();
         List<sys_org> GetOrgs();
     }

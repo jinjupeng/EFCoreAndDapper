@@ -1,3 +1,4 @@
+using Castle.DynamicProxy;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,7 @@ using WebAPI.BLL;
 using WebAPI.DAL;
 using WebAPI.DAL.UnitOfWork;
 using WebAPI.Extensions.AOP;
+using WebAPI.Extensions.ServiceExensions;
 using WebAPI.IBLL;
 using WebAPI.IDAL;
 using WebAPI.Model.Contexts;
@@ -32,7 +34,9 @@ namespace WebAPI
             services.AddScoped(typeof(IBaseDal<>), typeof(BaseDal<>));
             //https://www.cnblogs.com/sheng-jie/p/7416302.html
             services.AddScoped<IUnitOfWork, UnitOfWork<ContextMySql>>();
-            services.AddScoped(typeof(TransactionInterceptor));
+            services.AddSingleton(new ProxyGenerator());
+            services.AddScoped<IInterceptor, TransactionInterceptor>();
+            services.AddProxiedScoped<ITestService, TestService>();
 
             // 数据库上下文注入
             services.AddDbContext<ContextMySql>(option => option.UseMySql(Configuration["Setting:DefaultConnection"]));

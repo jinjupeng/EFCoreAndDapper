@@ -1,4 +1,5 @@
 ﻿using ApiServer.Model.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,25 +24,25 @@ namespace WebAPI.BLL
         }
 
         [Transaction]
-        public async Task InsertAsync()
+        public void InsertAsync()
         {
-            var insertSql = @$"INSERT INTO sys_org ( org_pid, is_leaf, level, status) VALUES
-                       (@org_pid, @is_leaf, @level, @status); ";
+            //http://codethug.com/2021/03/17/Caching-with-Attributes-in-DotNet-Core5/
+            //https://blog.csdn.net/XinShun/article/details/99551993 异步方法和同步方法需分开处理
+            var insertSql = @$"INSERT INTO sys_org ( org_pid, org_pids, org_name, is_leaf, level, status) VALUES
+                       (@org_pid, @org_pids, @org_name, @is_leaf, @level, @status); ";
 
-            var param = new { org_pid = 1, is_leaf = true, level = 1, status = true };
-            var count = await _unitOfWork.ExecuteAsync(insertSql, param, _unitOfWork.CurrentTransaction);
-            //if(count == 1)
-            //{
-            //    throw new Exception("测试");
-            //}
+            var param = new { org_pid = 1, org_pids = "[0]", org_name = "orgname", is_leaf = true, level = 1, status = true };
+            var count =  _unitOfWork.ExecuteAsync(insertSql, param, _unitOfWork.CurrentTransaction);
+
             var sysUser = new sys_user
             {
                 username = "efcoreanddapper",
-                password = "123456",
+                password = "12345678",
                 org_id = 1,
-                enabled = true
+                enabled = true,
+                phone = "hfiguierhgdsahgkahrikshjfwjefuerijclmcjsoiwamsllksjfowjeijljkljlsj" // 超过最大字符，抛异常
             };
-            await _baseSysUserService.AddAsync(sysUser);
+            _baseSysUserService.Add(sysUser);
         }
 
         public List<sys_user> GetUsers()
