@@ -5,7 +5,7 @@ using System.Collections.Generic;
 // If you have enabled NRTs for your project, then un-comment the following line:
 // #nullable disable
 
-namespace ApiServer.Model.Entity
+namespace ApiServer.Model.Entities
 {
     public partial class sys_org
     {

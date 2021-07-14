@@ -26,6 +26,7 @@ namespace WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<ITestService, TestService>();
             // ·ºÐÍ×¢Èë
             services.AddScoped(typeof(IBaseService<>), typeof(BaseService<>));
             services.AddScoped(typeof(IBaseDal<>), typeof(BaseDal<>));

@@ -1,4 +1,4 @@
-﻿using ApiServer.Model.Entity;
+﻿using ApiServer.Model.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace WebAPI.Model.Contexts
@@ -21,7 +21,7 @@ namespace WebAPI.Model.Contexts
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseMySql("server=127.0.0.1;port=3306;database=mpshop;user id=root;password=123456;allow user variables=True", x => x.ServerVersion("8.0.13-mysql"));
+                optionsBuilder.UseMySql("server=127.0.0.1;port=3306;database=mpshop;user id=root;password=123456;allow user variables=True");
             }
         }
 
