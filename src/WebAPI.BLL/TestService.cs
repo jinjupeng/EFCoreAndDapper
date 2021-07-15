@@ -28,6 +28,7 @@ namespace WebAPI.BLL
         {
             //http://codethug.com/2021/03/17/Caching-with-Attributes-in-DotNet-Core5/
             //https://blog.csdn.net/XinShun/article/details/99551993 异步方法和同步方法需分开处理
+            //https://www.cnblogs.com/zhaopei/archive/2019/05/20/10875775.html
             var insertSql = @$"INSERT INTO sys_org ( org_pid, org_pids, org_name, is_leaf, level, status) VALUES
                        (@org_pid, @org_pids, @org_name, @is_leaf, @level, @status); ";
 

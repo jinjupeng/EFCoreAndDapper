@@ -2,8 +2,10 @@
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using WebAPI.DAL.UnitOfWork;
 using WebAPI.Extensions.Attributes;
+using WebAPI.Extensions.Extensions;
 
 namespace WebAPI.Extensions.AOP
 {
@@ -31,7 +33,7 @@ namespace WebAPI.Extensions.AOP
         public void Intercept(IInvocation invocation)
         {
             var method = invocation.MethodInvocationTarget ?? invocation.Method;
-            // 判断方法是否使用了Transaction注解，如果使用了才给它加事务
+            // 如果标记了 [Transaction]
             if (method.GetCustomAttributes(true).FirstOrDefault(x => x.GetType() == typeof(TransactionAttribute)) is TransactionAttribute)
             {
                 //执行原有方法之前
@@ -44,12 +46,31 @@ namespace WebAPI.Extensions.AOP
                 _logger.LogInformation(new EventId(trans.GetHashCode()), "Use Transaction");
                 try
                 {
-                    // 执行原有被拦截的方法
-                    invocation.Proceed();
-                    if (trans != null)
+                    // 异步拦截处理
+                    if (method.ReturnType.IsAsyncType())
                     {
-                        _logger.LogInformation(new EventId(trans.GetHashCode()), "Transaction Commit");
-                        trans.Commit();
+                        var task = method.Invoke(invocation.InvocationTarget, invocation.Arguments) as Task;
+                        task.ContinueWith(x => {
+                            if (x.Status == TaskStatus.RanToCompletion)
+                            {
+                                trans.Commit();
+                            }
+                            else
+                            {
+                                trans.Rollback();
+                            }
+                        }).ConfigureAwait(false);
+                        invocation.ReturnValue = task;
+                    }
+                    else // 同步拦截处理
+                    {
+                        // 执行原有被拦截的方法
+                        invocation.Proceed();
+                        if (trans != null)
+                        {
+                            _logger.LogInformation(new EventId(trans.GetHashCode()), "Transaction Commit");
+                            trans.Commit();
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -67,8 +88,24 @@ namespace WebAPI.Extensions.AOP
             }
             else
             {
-                // 执行原有被拦截的方法
-                invocation.Proceed();
+                //如果没有标记[Transaction]，直接执行方法
+                try
+                {
+                    if (method.ReturnType.IsAsyncType())
+                    {
+                        var task = method.Invoke(invocation.InvocationTarget, invocation.Arguments) as Task;
+                        invocation.ReturnValue = task;
+                    }
+                    else
+                    {
+                        // 执行原有被拦截的方法
+                        invocation.Proceed();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.InnerException.Message);
+                }
             }
         }
     }
