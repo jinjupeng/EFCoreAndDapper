@@ -1,11 +1,9 @@
-﻿using ApiServer.Model.Entities;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WebAPI.DAL.UnitOfWork;
-using WebAPI.Extensions.Attributes;
+using UnitOfWork;
 using WebAPI.IBLL;
+using WebAPI.Model.Entities;
 
 namespace WebAPI.BLL
 {
@@ -24,7 +22,7 @@ namespace WebAPI.BLL
         }
 
         [Transaction]
-        public void InsertAsync()
+        public async Task InsertAsync()
         {
             //http://codethug.com/2021/03/17/Caching-with-Attributes-in-DotNet-Core5/
             //https://blog.csdn.net/XinShun/article/details/99551993 异步方法和同步方法需分开处理
@@ -33,7 +31,7 @@ namespace WebAPI.BLL
                        (@org_pid, @org_pids, @org_name, @is_leaf, @level, @status); ";
 
             var param = new { org_pid = 1, org_pids = "[0]", org_name = "orgname", is_leaf = true, level = 1, status = true };
-            var count =  _unitOfWork.ExecuteAsync(insertSql, param, _unitOfWork.CurrentTransaction);
+            await _unitOfWork.ExecuteAsync(insertSql, param, _unitOfWork.CurrentTransaction);
 
             var sysUser = new sys_user
             {
@@ -41,7 +39,7 @@ namespace WebAPI.BLL
                 password = "12345678",
                 org_id = 1,
                 enabled = true,
-                phone = "hfiguierhgdsahgkahrikshjfwjefuerijclmcjsoiwamsllksjfowjeijljkljlsj" // 超过最大字符，抛异常
+                phone = "1234sfadgert4546476tfdht6867923124dgdgnryfui734etsgdfhtyikjhmgdggseteytkjderwt" // 超过最大字符，抛异常，两张表中数据都将回滚，测试通过
             };
             _baseSysUserService.Add(sysUser);
         }

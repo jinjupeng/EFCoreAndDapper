@@ -8,8 +8,4 @@
     <PackageReference Include="Castle.Core" Version="4.4.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\WebAPI.DAL\WebAPI.DAL.csproj" />
-  </ItemGroup>
-
 </Project>

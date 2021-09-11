@@ -1,5 +1,5 @@
-﻿using ApiServer.Model.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using WebAPI.Model.Entities;
 
 namespace WebAPI.Model.Contexts
 {

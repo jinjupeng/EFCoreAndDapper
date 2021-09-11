@@ -5,8 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WebAPI.DAL\WebAPI.DAL.csproj" />
-    <ProjectReference Include="..\WebAPI.Extensions\WebAPI.Extensions.csproj" />
+    <PackageReference Include="My.EntityFrameworkCore.UnitOfWork" Version="3.1.18.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WebAPI.Model\WebAPI.Model.csproj" />
   </ItemGroup>
 
 </Project>

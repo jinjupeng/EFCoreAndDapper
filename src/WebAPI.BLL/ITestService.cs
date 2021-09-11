@@ -1,13 +1,12 @@
-﻿using ApiServer.Model.Entities;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using WebAPI.Model.Entities;
 
 namespace WebAPI.BLL
 {
     public interface ITestService
     {
-        void InsertAsync();
+        Task InsertAsync();
         List<sys_user> GetUsers();
         List<sys_org> GetOrgs();
     }

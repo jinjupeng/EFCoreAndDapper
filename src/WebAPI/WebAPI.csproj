@@ -5,8 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\WebAPI.BLL\WebAPI.BLL.csproj" />
-    <ProjectReference Include="..\WebAPI.Extensions\WebAPI.Extensions.csproj" />
     <ProjectReference Include="..\WebAPI.Model\WebAPI.Model.csproj" />
   </ItemGroup>
 

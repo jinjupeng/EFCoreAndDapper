@@ -4,9 +4,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using WebAPI.DAL.UnitOfWork;
+using UnitOfWork;
 using WebAPI.IBLL;
-using WebAPI.IDAL;
 
 namespace WebAPI.BLL
 {
@@ -16,13 +15,13 @@ namespace WebAPI.BLL
     /// <typeparam name="T"></typeparam>
     public class BaseService<T> : IBaseService<T> where T : class
     {
-        private readonly IBaseDal<T> _baseDal;
+        private readonly IBaseRepository<T> _baseDal;
         protected IUnitOfWork unitOfWork;
 
         public BaseService() { }
-        public BaseService(IBaseDal<T> baseDal, IUnitOfWork unitOfWork)
+        public BaseService(IUnitOfWork unitOfWork)
         {
-            _baseDal = baseDal;
+            _baseDal = unitOfWork.GetRepository<T>();
             this.unitOfWork = unitOfWork;
         }
 

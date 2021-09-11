@@ -19,7 +19,7 @@ namespace WebAPI.Controllers
         [Route("insert")]
         public async Task<IActionResult> InsertTest()
         {
-            _testService.InsertAsync();
+            await _testService.InsertAsync();
             return Ok();
         }
 
